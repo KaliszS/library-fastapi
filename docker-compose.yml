@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: .
+    container_name: library_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - db_host=db
+    restart: always
+
+  db:
+    image: postgres:17-bookworm
+    container_name: library_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: library
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
