@@ -9,7 +9,7 @@ from app.database import Base, engine, get_db
 
 from .factories import BookFree, BookBorrowed
 from .utils import Session as SessionScoped
-from tests.fixtures.books import (  # noqa: F401
+from tests.output_fixtures.books import (  # noqa: F401
     book_new_result,
     book_free_result,
     book_free_update_result,
