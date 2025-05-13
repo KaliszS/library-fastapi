@@ -1,14 +1,6 @@
-from sqlalchemy.inspection import inspect
-
 from app.database import Base
 from app.config import settings
-
-
-def base_to_dict(instance: Base) -> dict[str, str]:
-    """Function to convert SQLALchemy Base model into dict."""
-    return {
-        c.key: getattr(instance, c.key) for c in inspect(instance).mapper.column_attrs
-    }
+from app.utils.utils import base_to_dict
 
 
 def build_query(base_url: str, name: str, inst_id: str | None = "") -> str:
@@ -47,9 +39,7 @@ def generate_collection_links(
         {"rel": "next", "href": f"{base_url}?page={page + 1}&limit={limit}"},
     ]
     if page > 1:
-        links.append(
-            {"rel": "prev", "href": f"{base_url}?page={page - 1}&limit={limit}"}
-        )
+        links.append({"rel": "prev", "href": f"{base_url}?page={page - 1}&limit={limit}"})
     return links
 
 

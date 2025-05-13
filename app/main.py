@@ -14,9 +14,7 @@ api = FastAPI(title="Library API")
 
 
 @api.exception_handler(RequestValidationError)
-async def request_validation_exception_handler(
-    request: Request, exc: RequestValidationError
-):
+async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
     raise handle_exception(exc, err_msg=exc.args[0][0]["msg"])
 
 

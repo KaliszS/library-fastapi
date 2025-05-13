@@ -27,4 +27,4 @@ class BookReadList(BaseModel):
 
 class BookBorrow(BaseModel):
     reader: Annotated[str, StringConstraints(pattern=r"^[0-9]{6}$")]
-    borrowing_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    borrowing_time: datetime | None = Field(default_factory=lambda: datetime.now(timezone.utc))

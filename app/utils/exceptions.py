@@ -52,9 +52,9 @@ def _(exc: AttributeError, entity: str) -> HTTPException:
 
 def handle_exceptions[**P, T](func: Callable[P, T]) -> Callable[P, T]:
     @wraps(func)
-    async def async_wrapper(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def async_wrapper(self, *args: P.args, **kwargs: P.kwargs) -> T:
         try:
-            return await func(self, *args, **kwargs)
+            return func(self, *args, **kwargs)
         except Exception as exc:
             entity_name = getattr(self, "name", "unknown")
             raise handle_exception(exc, entity_name) from exc

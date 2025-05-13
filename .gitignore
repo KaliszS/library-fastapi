@@ -11,3 +11,6 @@ wheels/
 
 # Linter and Tests
 .*_cache
+
+# Env variables
+.env

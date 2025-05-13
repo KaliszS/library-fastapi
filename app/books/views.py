@@ -9,7 +9,7 @@ from app.books.schemas import (
     BookReadList,
     BookBorrow,
 )
-from app.books.services import book_services
+from app.books.services import book_service
 
 
 router = APIRouter()
@@ -19,20 +19,20 @@ book_rels = [
 ]
 
 
-@router.post("", response_model=BookRead, status_code=status.HTTP_201_CREATED)
-@format_response(extra_rels=book_rels)
+@router.post("", response_model=BookRead)
+@format_response(extra_rels=book_rels, status_code=status.HTTP_201_CREATED)
 async def create_book(request: Request, db: PgSession, book: BookCreate):
-    return await book_services.create(db, book)
+    return book_service.create(db, book)
 
 
-@router.get("/{book_id}", response_model=BookRead, status_code=status.HTTP_200_OK)
-@format_response(extra_rels=book_rels)
+@router.get("/{book_id}", response_model=BookRead)
+@format_response(extra_rels=book_rels, status_code=status.HTTP_200_OK)
 async def read_book(request: Request, db: PgSession, book_id: serial_number):
-    return await book_services.get(db, book_id)
+    return book_service.get(db, book_id)
 
 
-@router.get("", response_model=BookReadList, status_code=status.HTTP_200_OK)
-@format_response(is_collection=True)
+@router.get("", response_model=BookReadList)
+@format_response(is_collection=True, status_code=status.HTTP_200_OK)
 async def read_books(
     request: Request,
     db: PgSession,
@@ -43,28 +43,24 @@ async def read_books(
     if author:
         filters["author"] = author
 
-    return await book_services.get_all(db, filters=filters, **pagination)
+    return book_service.get_all(db, filters=filters, **pagination)
 
 
-@router.patch(
-    "/{book_id}/borrow", response_model=BookRead, status_code=status.HTTP_200_OK
-)
-@format_response(extra_rels=book_rels)
+@router.patch("/{book_id}/borrow", response_model=BookRead)
+@format_response(extra_rels=book_rels, status_code=status.HTTP_200_OK)
 async def borrow_book(
     request: Request, db: PgSession, book_id: serial_number, settlement: BookBorrow
 ):
-    return await book_services.update(db, book_id, settlement)
+    return book_service.update(db, book_id, settlement)
 
 
-@router.post(
-    "/{book_id}/return", response_model=BookRead, status_code=status.HTTP_200_OK
-)
-@format_response(extra_rels=book_rels)
+@router.post("/{book_id}/return", response_model=BookRead)
+@format_response(extra_rels=book_rels, status_code=status.HTTP_200_OK)
 async def return_book(request: Request, db: PgSession, book_id: serial_number):
-    return await book_services.give_back(db, book_id)
+    return book_service.give_back(db, book_id)
 
 
-@router.delete("/{book_id}", response_model=BookRead, status_code=status.HTTP_200_OK)
-@format_response(extra_rels=book_rels)
+@router.delete("/{book_id}", response_model=BookRead)
+@format_response(extra_rels=book_rels, status_code=status.HTTP_200_OK)
 async def delete_book(request: Request, db: PgSession, book_id: serial_number):
-    return await book_services.delete(db, book_id)
+    return book_service.delete(db, book_id)
